@@ -3,3 +3,5 @@ config.py
 *.pyc
 */**/*.pyc
 ENV
+py3
+*.csv
