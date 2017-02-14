@@ -2,6 +2,7 @@
 import scrapy
 import zlib
 import re
+import cgi
 
 class DownloadPaperSpider(scrapy.Spider):
     name = "DownloadPaper"
@@ -34,7 +35,8 @@ class DownloadPaperSpider(scrapy.Spider):
                                  formdata={'name': self.acc, 'pwd': self.pwd, 'checkbox': 'on'},
                                  meta={'cookiejar': 1})
 
-    def generate_page_urls():
+    @classmethod
+    def generate_page_urls(cls):
         f = open("./paper.csv","r")
         items = f.read().split("\n")
         items = list(filter(len, items))
@@ -58,19 +60,21 @@ class DownloadPaperSpider(scrapy.Spider):
 
 #webdownload.asp?uname=bitstyle11&did=2014647&degree=1&baogaotype=15&fromtype=21
     def get_download_url(self, response):
-        match = re.search(re.compile(r"(webdownload\.asp\?uname=bitstyle11&did=.+?)\n", re.MULTILINE), response.body.decode("utf-8") )
+        match = re.search(re.compile(r"(webdownload\.asp\?uname=bitstyle11&did=.+\d+)", re.MULTILINE), response.body )
+        # match = re.search(re.compile(b"(webdownload\.asp\?uname=bitstyle11&did=.+?)'\n", re.MULTILINE), response.body )
         if match:
-            download_path = match.group(1)
-            return scrapy.Request(self.host + download_path, callback=store_file, meta={'cookiejar': response.meta['cookiejar']})
+            download_path = match.group(0)
+            return scrapy.Request(self.host +"/"+ download_path, callback=self.store_file, meta={'cookiejar': response.meta['cookiejar']})
         else:
-            self.logger.error('Error on index %s', response.request.url, self.index)
+            self.logger.error('Error on index %s', self.index)
             self.index+=1
             return self.scrape_page()
 
         
 
     def store_file(self, response):
-        with open("/Users/yuchao/Downloads/%s.pdf" % self.index, 'wb') as f:
+        file_name = (cgi.parse_header(response.headers['Content-Disposition'])[1]['filename']).decode('gbk')
+        with open("/Users/yuchaoma/Downloads/%s" % file_name, 'wb') as f:
             f.write(zlib.decompress(response.body, 16+zlib.MAX_WBITS))
         print("%s downloaded" % self.index)
         self.index += 1
