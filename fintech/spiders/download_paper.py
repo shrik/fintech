@@ -58,14 +58,14 @@ class DownloadPaperSpider(scrapy.Spider):
 
 #webdownload.asp?uname=bitstyle11&did=2014647&degree=1&baogaotype=15&fromtype=21
     def get_download_url(self, response):
-        print(response.body)
-        download_url = re.search("webdownload.asp?uname=bitstyle11&did=.+", response.body )
-        if download_url:
-            return scrapy.Request(download_url, callback=store_file, meta={'cookiejar': response.meta['cookiejar']})
+        match = re.search(re.compile(r"(webdownload\.asp\?uname=bitstyle11&did=.+?)\n", re.MULTILINE), response.body.decode("utf-8") )
+        if match:
+            download_path = match.group(1)
+            return scrapy.Request(self.host + download_path, callback=store_file, meta={'cookiejar': response.meta['cookiejar']})
         else:
             self.logger.error('Error on index %s', response.request.url, self.index)
             self.index+=1
-            return scrapy.scrape_page()
+            return self.scrape_page()
 
         
 
@@ -74,7 +74,7 @@ class DownloadPaperSpider(scrapy.Spider):
             f.write(zlib.decompress(response.body, 16+zlib.MAX_WBITS))
         print("%s downloaded" % self.index)
         self.index += 1
-        return scrapy.scrape_page()
+        return self.scrape_page()
 
     def errback_httpbin(self, failure):
         request = failure.request
