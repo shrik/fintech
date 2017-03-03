@@ -5,7 +5,7 @@ import urllib
 import json
 
 
-
+# https://rate.tmall.com/list_detail_rate.htm?itemId=44144124999&spuId=324629781&sellerId=876270265&order=3&currentPage=30&append=0&content=1
 class MobileHiborDocdetailSpider(scrapy.Spider):
     
     name = "MobileHiborDocdetail"
@@ -15,10 +15,14 @@ class MobileHiborDocdetailSpider(scrapy.Spider):
     # host = "http://newsmag.hibor.com.cn"
     user_agent = "Dalvik/2.1.0 (Linux; U; Android 6.0.1; SM919 Build/MXB48T)"
 
-    
-    url_format = "http://newsmag.hibor.com.cn/MobilePhone/DocDetailHandler.ashx?systype=android&btype=1&username=6W1UvWuYsTzVnWfUrQpO&id=%s"
+    # username sXrUdUiX 6W1UvWuYsTzVnWfUrQpO dTjXkWeU2XjXnTnV
+    # acc & pwd & encode_uid:  hbmyca & myc123456 & kX5V2XxTeTeV
+    # jy01264313 zx19880427  mXwUrRpOsQqOnRsRnMtQ
+    uids = ['sXrUdUiX', '6W1UvWuYsTzVnWfUrQpO' , 'dTjXkWeU2XjXnTnV' , 'kX5V2XxTeTeV', 'mXwUrRpOsQqOnRsRnMtQ']
 
-    start_index = 986
+    url_format = "http://newsmag.hibor.com.cn/MobilePhone/DocDetailHandler.ashx?systype=android&btype=1&username=%s&id=%s"
+
+    start_index = 18990 + 5000
     items_to_crawl = []
 
     @classmethod
@@ -33,12 +37,20 @@ class MobileHiborDocdetailSpider(scrapy.Spider):
         return cls.items_to_crawl
 
 
+    @classmethod
+    def getUid(cls):
+        uids = MobileHiborDocdetailSpider.uids
+        index = MobileHiborDocdetailSpider.start_index%5
+        return uids[index]
+
     def start_requests(self):
         item = MobileHiborDocdetailSpider.items()[MobileHiborDocdetailSpider.start_index]
-        url = self.url_format %  item['id']
+        url = self.url_format % ( MobileHiborDocdetailSpider.getUid(), item['id'])
         return [scrapy.Request(url,callback=self.parse)]
 
     def parse(self, response):
+        if MobileHiborDocdetailSpider.start_index > 18990 + 7500:
+            return
         format_detail = self.format_detail(response.body)
         self.store(format_detail)
         print("scraped %s" % MobileHiborDocdetailSpider.start_index)
@@ -47,7 +59,7 @@ class MobileHiborDocdetailSpider(scrapy.Spider):
 
     def next_item(self, index):
         item = MobileHiborDocdetailSpider.items()[MobileHiborDocdetailSpider.start_index]
-        url = self.url_format %  item['id']
+        url = self.url_format %  ( MobileHiborDocdetailSpider.getUid(), item['id'])
         return scrapy.Request(url, callback=self.parse)
 
     def format_detail(self, body):

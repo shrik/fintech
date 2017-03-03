@@ -8,7 +8,7 @@ import json
 
 class MobileHiborSpider(scrapy.Spider):
     # start_time = "2017-02-20 10:00:00"
-    start_time = "2016-11-22 13:51:17"
+    start_time = "2016-04-18 11:23:27"
     name = "MobileHibor"
     allowed_domains = ["hibor.com.cn"]
 

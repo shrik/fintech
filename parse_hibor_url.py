@@ -6,7 +6,7 @@ start_index = 0
 
 decrypt_program = "java -cp /Users/yuchaoma/Documents/eclipse_workspace/src/ HelloWorld"
 
-with open("/Users/yuchaoma/Desktop/hibor/items_detail.txt.bak2", "r") as f:
+with open("/Users/yuchaoma/Desktop/hibor/items_detail.txt", "r") as f:
     detail = f.read()
 items = []
 for d_item in detail.split("\n"):
