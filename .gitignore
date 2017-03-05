@@ -5,3 +5,4 @@ config.py
 ENV
 py3
 *.csv
+.DS_Store

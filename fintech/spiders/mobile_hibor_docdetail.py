@@ -22,7 +22,7 @@ class MobileHiborDocdetailSpider(scrapy.Spider):
 
     url_format = "http://newsmag.hibor.com.cn/MobilePhone/DocDetailHandler.ashx?systype=android&btype=1&username=%s&id=%s"
 
-    start_index = 18990 + 5000
+    start_index = 28931
     items_to_crawl = []
 
     @classmethod
@@ -49,7 +49,7 @@ class MobileHiborDocdetailSpider(scrapy.Spider):
         return [scrapy.Request(url,callback=self.parse)]
 
     def parse(self, response):
-        if MobileHiborDocdetailSpider.start_index > 18990 + 7500:
+        if MobileHiborDocdetailSpider.start_index > 28931 + 2500:
             return
         format_detail = self.format_detail(response.body)
         self.store(format_detail)
