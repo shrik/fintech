@@ -18,6 +18,7 @@ def with_advice?(line)
             return true
         end
     end
+    return false
 end
 
 def get_advice(line)
@@ -26,6 +27,7 @@ def get_advice(line)
             return word
         end
     end
+    return false
 end
 
 def get_stock(line)
