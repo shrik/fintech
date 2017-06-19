@@ -1,0 +1,39 @@
+LOAD DATA LOCAL INFILE '/Users/yuchaoma/workspace/fin_research/cs.csv'
+INTO TABLE stocks
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(id, abbrev_symbol,board_type,concept_names,de_listed_date,exchange,industry_code,industry_name,
+    listed_date,order_book_id,round_lot,sector_code,sector_code_name,special_type,status,symbol,type)
+
+
+CREATE TABLE `stocks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `abbrev_symbol` varchar(255) DEFAULT NULL,
+  `board_type` varchar(255) DEFAULT NULL,
+  `concept_names` varchar(255) DEFAULT NULL,
+  `de_listed_date` varchar(255) DEFAULT NULL,
+  `exchange` varchar(255) DEFAULT NULL,
+  `industry_code` varchar(255) DEFAULT NULL,
+  `industry_name` varchar(255) DEFAULT NULL,
+  `listed_date` varchar(255) DEFAULT NULL,
+  `order_book_id` varchar(255) DEFAULT NULL,
+  `round_lot` varchar(255) DEFAULT NULL,
+  `sector_code` varchar(255) DEFAULT NULL,
+  `sector_code_name` varchar(255) DEFAULT NULL,
+  `special_type` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `symbol` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `stock_advice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hibor_doc_id` varchar(255) DEFAULT NULL,
+  `line` varchar(255) DEFAULT NULL,
+  `cooperation_name` varchar(255) DEFAULT NULL,
+  `abbrev_symbol` varchar(255) DEFAULT NULL,
+  `grade` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

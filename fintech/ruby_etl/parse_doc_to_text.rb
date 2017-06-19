@@ -9,7 +9,7 @@ def parse(hibor_doc)
     doc_path = ("%06d" % hibor_doc.id)
     path = []
     (0..5).step(2).each do |s|
-        path << doc_path[s..(s+2)] 
+        path << doc_path[s..(s+1)] 
     end
     path = path.join("/")
     file_path = prefix + "/" + path + ".pdf"
@@ -32,4 +32,12 @@ hibor_docs.each do |hibor_doc|
     hibor_doc.save!
     doctext.save!
 end
+
+
+
+
+
+
+
+
 
